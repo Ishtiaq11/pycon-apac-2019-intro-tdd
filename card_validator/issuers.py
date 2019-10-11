@@ -13,7 +13,7 @@ https://en.wikipedia.org/wiki/Payment_card_number#Issuer_identification_number_.
 
 def get_issuer(number: str):
     if number.startswith('4'):
-        return 'MasterCard'
+        return 'Visa'
 
     second_digit = number[1]
 
@@ -21,7 +21,7 @@ def get_issuer(number: str):
         return "American Express"
 
     if number.startswith('5') and second_digit in ('1', '2', '3', '4', '5'):
-        return "Visa"
+        return "MasterCard"
 
     raise ValueError("Unknown Card Type")
 
@@ -36,5 +36,5 @@ if __name__ == '__main__':
     print("MasterCard test passed!")
 
     # Replace the following assertion with a test for American Express Cards
-    assert False
+    assert get_issuer('34062876677853409') == 'American Express'
     print("All tests passed!")
