@@ -19,5 +19,5 @@ def test_american_express():
 
 
 def test_unknown_numbers():
-    with pytest.raises(LookupError):
+    with pytest.raises(ValueError):
         get_issuer('9462876677853409')
