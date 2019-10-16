@@ -5,21 +5,18 @@ import pytest
 from card_validator.issuers import get_issuer
 
 
-class ValidCreditCardTest(TestCase):
-
-    def test_visa(self):
-        assert get_issuer('4862876677853409') == 'Visa'
-
-    def test_mastercard(self):
-        assert get_issuer('5462876677853409') == 'MasterCard'
-
-    def test_american_express(self):
-        assert get_issuer('3472876677853409') == 'American Express'
+@pytest.mark.parametrize("number,issuer", [
+    ("4862876677853409", "Visa"),
+    ("5462876677853409", "MasterCard"),
+    ("3472876677853409", "American Express")
+])
+def test_identifier(number, issuer):
+    assert get_issuer(number) == issuer
 
 
-    def test_unknown_numbers(self):
-        with pytest.raises(ValueError):
-            get_issuer('9462876677853409')
+def test_unknown_numbers():
+    with pytest.raises(ValueError):
+        get_issuer('9462876677853409')
 
 
 class CardIssuerConfusionTest(TestCase):
