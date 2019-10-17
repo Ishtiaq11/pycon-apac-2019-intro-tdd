@@ -1,8 +1,11 @@
 from unittest import TestCase
+from unittest.mock import Mock, patch
+import json
 
 import pytest
+import requests_mock
 
-from card_validator.issuers import get_issuer
+from card_validator.issuers import get_issuer, get_issuer_from_api
 
 
 class TestValidCreditCard():
@@ -42,3 +45,27 @@ class CardIssuerConfusionTest(TestCase):
 
     def test_american_express(self):
         assert get_issuer('3472876677853409') == 'American Express'
+
+
+class TestRemoteGetIssuer:
+    def test_ok_result(self):
+        # with patch("requests.post") as mocked_post:
+        #     mock_response = Mock()
+        #     mock_response.status_code = 200
+        #     mock_response.json = Mock(return_value={
+        #         "number": "3472876677853409",
+        #         "result": "American Express"
+        #     })
+        #     mocked_post.return_value = mock_response
+
+        #     assert get_issuer_from_api("3472876677853409") == "American Expres"
+        with requests_mock.mock() as m:
+            m.post(
+                "http://tuxboy.pythonanywhere.com/api/v3/checkNumber", 
+                json={
+                    "number": "3472876677853409",
+                    "result": "American Express"
+                }
+            )
+
+            assert get_issuer_from_api("3472876677853409") == "American Express"

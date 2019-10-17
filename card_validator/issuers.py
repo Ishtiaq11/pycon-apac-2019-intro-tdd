@@ -14,6 +14,8 @@ import re
 import requests
 
 
+API_URL = 'http://tuxboy.pythonanywhere.com/api/v3/checkNumber'
+
 class LocalCreditCardChecker:
     PATTERNS = {
         'Visa': re.compile(r'^4'),
@@ -32,12 +34,15 @@ class LocalCreditCardChecker:
 
 class RemoteCreditCardChecker:
     def get_issuer(self, number):
-        response = requests.post(number)
+        response = requests.post(
+            API_URL, 
+            data={'number': number}
+        )
         response.raise_for_status()
 
         data = response.json()
 
-        return data['issuest']
+        return data['result']
 
 
 def get_issuer(number: str):
